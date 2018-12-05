@@ -1,0 +1,41 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+
+input_path = Pathname("#{__dir__}/../data/input_04.txt")
+data = input_path.readlines.map(&:chomp).sort
+
+guard = nil
+events_for_guard = {}
+data.each do |line|
+  case line
+  when /Guard #(\d+) begins shift/
+    guard = $1.to_i
+    events_for_guard[guard] ||= []
+  when /(\d+)\] falls asleep/
+    events_for_guard[guard] << [:asleep, $1.to_i]
+  when /(\d+)\] wakes up/
+    events_for_guard[guard] << [:up, $1.to_i]
+  end
+end
+
+# This is doing a lot of validations which turn out to be unnecessary
+
+total_sleep_time = Hash.new(0)
+minutes_slept_at = Hash.new { |ht, k| ht[k] = [] }
+
+events_for_guard.each do |guard, evs|
+  pairs = evs.each_slice(2).to_a
+  unless pairs.empty?
+    raise unless pairs.map(&:first).map(&:first).uniq == [:asleep]
+    raise unless pairs.map(&:last).map(&:first).uniq == [:up]
+  end
+  minutes_asleep = pairs.flat_map { |a, b| (a.last..b.last - 1).to_a }
+  total_sleep_time[guard] += minutes_asleep.size
+  minutes_slept_at[guard].push *minutes_asleep
+end
+
+guard = total_sleep_time.max_by(&:last).first
+minute = minutes_slept_at[guard].group_by(&:itself).transform_values(&:size).max_by(&:last).first
+
+p guard * minute

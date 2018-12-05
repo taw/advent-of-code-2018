@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+
+input_path = Pathname("#{__dir__}/../data/input_04.txt")
+data = input_path.readlines.map(&:chomp).sort
+
+guard = nil
+events_for_guard = {}
+data.each do |line|
+  case line
+  when /Guard #(\d+) begins shift/
+    guard = $1.to_i
+    events_for_guard[guard] ||= []
+  when /(\d+)\] falls asleep/
+    events_for_guard[guard] << [:asleep, $1.to_i]
+  when /(\d+)\] wakes up/
+    events_for_guard[guard] << [:up, $1.to_i]
+  end
+end
+
+by_minute = {}
+
+events_for_guard.each do |guard, evs|
+  pairs = evs.each_slice(2).to_a
+  unless pairs.empty?
+    raise unless pairs.map(&:first).map(&:first).uniq == [:asleep]
+    raise unless pairs.map(&:last).map(&:first).uniq == [:up]
+  end
+  minutes_asleep = pairs.flat_map { |a, b| (a.last..b.last - 1).to_a }
+
+  minutes_asleep.each do |m|
+    by_minute[m] ||= []
+    by_minute[m] << guard
+  end
+end
+
+by_minute_totals = by_minute.transform_values { |gs| gs.group_by(&:itself).transform_values(&:size).max_by(&:last) }
+m, g, t = by_minute_totals.map(&:flatten).max_by(&:last)
+p m * g

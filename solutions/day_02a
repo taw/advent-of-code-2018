@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+
+input_path = Pathname("#{__dir__}/../data/input_02.txt")
+data = input_path.readlines.map(&:chomp)
+
+v2 = 0
+v3 = 0
+data.each do |line|
+  c = line.chars.group_by(&:itself).transform_values(&:size).values
+  v2 += 1 if c.include?(2)
+  v3 += 1 if c.include?(3)
+end
+
+p v2 * v3

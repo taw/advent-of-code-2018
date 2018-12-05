@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+
+def diff(a, b)
+  a.chars.zip(b.chars).count { |u, v| u != v }
+end
+
+input_path = Pathname("#{__dir__}/../data/input_02.txt")
+data = input_path.readlines.map(&:chomp)
+
+data.each do |w1|
+  data.each do |w2|
+    if diff(w1, w2) == 1
+      puts w1.chars.zip(w2.chars).select{|u,v| u == v}.map(&:first).join
+      exit
+    end
+  end
+end

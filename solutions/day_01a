@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+
+input_path = Pathname("#{__dir__}/../data/input_01.txt")
+data = input_path.readlines.map(&:to_i)
+p data.sum

@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+require "set"
+require "pathname"
+
+input_path = Pathname("#{__dir__}/../data/input_01.txt")
+data = input_path.readlines.map(&:to_i)
+seen = Set[]
+
+e = 0
+while true
+  data.each do |f|
+    e += f
+    if seen.include?(e)
+      p e
+      exit
+    end
+    seen << e
+  end
+end

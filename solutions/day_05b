@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+require "pry"
+
+input_path = Pathname("#{__dir__}/../data/input_05.txt")
+data = input_path.read.chomp
+
+rx = Regexp.new ("a".."z").map { |x| "#{x}#{x.upcase}|#{x.upcase}#{x}" }.join("|")
+
+res = []
+("a".."z").each do |letter|
+  w = data.gsub(letter, "").gsub(letter.upcase, "")
+  1 while w.gsub!(rx, "")
+  res << [w.size, letter]
+end
+
+p res.min

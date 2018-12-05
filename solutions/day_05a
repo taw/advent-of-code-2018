@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+require "pry"
+
+input_path = Pathname("#{__dir__}/../data/input_05.txt")
+data = input_path.read.chomp
+
+rx = Regexp.new ("a".."z").map{|x| "#{x}#{x.upcase}|#{x.upcase}#{x}" }.join("|")
+
+1 while data.gsub!(rx, "")
+
+puts data.size

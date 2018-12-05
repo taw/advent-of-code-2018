@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+require "pathname"
+require "pp"
+
+data = []
+input_path = Pathname("#{__dir__}/../data/input_03.txt")
+input_path.readlines.map(&:chomp).each do |line|
+  raise unless line =~ /\A#(\d+) @ (\d+),(\d+): (\d+)x(\d+)\z/
+  data << [$1.to_i, $2.to_i, $3.to_i, $4.to_i, $5.to_i]
+end
+
+counts = Hash.new(0)
+data.each do |elf, x0, y0, xsz, ysz|
+  (x0...x0 + xsz).each do |x|
+    (y0...y0 + ysz).each do |y|
+      counts[[x, y]] += 1
+    end
+  end
+end
+
+p counts.values.select { |u| u > 1 }.size

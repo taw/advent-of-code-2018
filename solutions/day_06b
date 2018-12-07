@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+
+require_relative "day_06"
+
+class Day06B < Day06
+  def safe_in_box(xs, ys, max)
+    result = 0
+    xs.each do |x|
+      ys.each do |y|
+        e = distance_sum(x, y)
+        result += 1 if e < max
+      end
+    end
+    result
+  end
+
+  def call(max)
+    p safe_in_box(*bounds, max)
+  end
+end
+
+Day06B.new("b").call(32)
+Day06B.new().call(10000)

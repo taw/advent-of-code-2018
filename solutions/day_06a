@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+require_relative "day_06"
+
+class Day06A < Day06
+  def call
+    # This could be fixed by extending boundary
+    raise unless (present_on_boundary(*bounds) - infinite_points).empty?
+    finite_counts = counts_in_box(*bounds).select{ |pt,cnt| !infinite_points.include?(pt) }
+
+    p finite_counts
+
+    p finite_counts.max_by(&:last)
+  end
+end
+
+Day06A.new.call

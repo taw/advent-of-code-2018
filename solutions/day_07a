@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+require_relative "day_07"
+
+class Day07A < Day07
+  def call
+    result = ""
+    done = Set[]
+    todo = steps.dup
+
+    # O(n^2), oh well
+    until todo.empty?
+      available = todo.select { |c| (dependencies[c] || []).all? { |d| done.include?(d) } }
+      current = available.first
+      raise unless current
+      result << current
+      done << current
+      todo.delete(current)
+    end
+
+    result
+  end
+end
+
+raise unless Day07A.new("a").call == "CABDFE"
+puts Day07A.new.call

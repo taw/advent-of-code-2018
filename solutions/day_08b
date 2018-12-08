@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+require_relative "day_08"
+
+class Day08B < Day08
+  def call
+    root_node.value
+  end
+end
+
+p Day08B.new("a").call
+raise unless Day08B.new("a").call == 66
+p Day08B.new.call

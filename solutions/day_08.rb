@@ -14,6 +14,22 @@ class Node
     metadata.sum + children.map(&:metadata_sum).sum
   end
 
+  def value
+    if children.empty?
+      @metadata.sum
+    else
+      child_values = @children.map(&:value)
+      @metadata.map do |index|
+        index -= 1
+        if index < 0 or index >= child_values.size
+          0
+        else
+          child_values[index]
+        end
+      end.sum
+    end
+  end
+
   def self.parse(tokens)
     num_children = tokens.shift
     num_metadata = tokens.shift

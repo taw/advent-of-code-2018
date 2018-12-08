@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+require_relative "day_08"
+
+class Day08A < Day08
+  def call
+    root_node.metadata_sum
+  end
+end
+
+p Day08A.new("a").call
+raise unless Day08A.new("a").call == 138
+p Day08A.new.call
